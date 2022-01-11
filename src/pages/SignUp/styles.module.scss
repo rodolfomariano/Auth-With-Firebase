@@ -1,0 +1,67 @@
+.card_container {
+  width: 100%;
+  height: 100vh;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card_login {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+    padding: 2rem 1rem;
+    box-shadow: 0 0 4px #ccc;
+    border-radius: 1rem;
+    margin: auto;
+
+    .return_to_login {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      
+      border-radius: 1rem 1rem 0 0;
+      font-size: 1rem;
+      color: #FFFFFF;
+      padding: 0 1rem;
+
+      a {
+        color: #0747A6;
+        font-size: .85rem;
+      }
+    }
+  
+    .title {
+      color: #207E54;
+      text-align: center;
+      font-family: 'Mochiy Pop P One', sans-serif;
+    }
+
+    form {
+      width: 100%;
+      margin-top: 2rem;
+
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+
+      .reCAPTCHA {
+        width: 100%;
+
+        display: flex;
+        justify-content: center;
+      }
+
+      .terms_of_use {
+        font-size: .8rem;
+        text-align: center;
+
+        a {
+          color: #01019e;
+        }
+      }
+    }
+
+  }
+}

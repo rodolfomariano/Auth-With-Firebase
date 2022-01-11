@@ -1,0 +1,190 @@
+.card_container {
+  width: 100%;
+  height: 100vh;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card_login {
+    width: 100%;
+    max-width: 350px;
+    padding: 2rem 1rem;
+    box-shadow: 0 0 4px #ccc;
+    border-radius: 1rem;
+    margin: auto;
+  
+    .title {
+      color: #0747A6;
+      text-align: center;
+      font-family: 'Mochiy Pop P One', sans-serif;
+    }
+
+    .social_button_container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      padding: 2rem 0;
+    }
+
+    .separator {
+      width: 100%;
+      position: relative;
+      color: #6e6e6e;
+
+      hr {
+        opacity: .5;
+      }
+
+      span {
+        position: absolute;
+        top: -10px;
+        width: 30px;
+        background-color: #F4F5F7;
+        margin-left: 50%;
+        transform: translateX(-50%);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    form {
+      width: 100%;
+      margin-top: 2rem;
+
+      display: flex;
+      flex-direction: column;
+      gap: .5rem;
+    }
+
+    .forgot_password {
+      display: inline-block;
+      color: #b1463f;
+      font-size: .75rem;
+      margin-top: .5rem;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+    }
+
+    .signUp_button {
+      display: inline-block;
+      margin-top: 1.5rem;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      color: #207E54;
+    }
+  }
+}
+
+.modal_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  .content {
+    position: absolute;
+    width: 350px;
+    // height: 200px;
+    background-color: var(--bg-color);
+    border-radius: 1rem;
+    padding: 0 .5rem;
+
+    .modal_header {
+      width: 100%;
+      padding: 1rem 0;
+
+      .close_modal_btn {
+        position: absolute;
+        z-index: 200;
+        top: -10px;
+        right: -10px;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: none;
+        background-color: #CF534A;
+        color: #FFF;
+        cursor: pointer;
+
+        &:hover {
+          background-color: #b1463f;
+        }
+      }
+
+      .modal_title {
+        color: purple;
+      }
+    }
+
+    .modal_footer {
+      width: 100%;
+      padding: 1rem 0;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      button {
+        width: 45%;
+        padding: .75rem 0;
+        font-size: 1rem;
+        font-weight: 300;
+        font-family: 'Nunito', sans-serif;
+        border: none;
+        cursor: pointer;
+        border-radius: .5rem;
+        transition: background-color 300ms;
+      }
+
+      .cancel {
+        background-color: #CF534A;
+        color: #FFF;
+
+        &:hover {
+          background-color: #b1463f;
+        }
+      }
+
+      .send {
+        background-color: #30bb7d;
+        color: #FFF;
+
+        &:hover {
+          background-color: #207E54;
+        }
+      }
+    }
+  }
+  
+  .modal_bg {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(204, 204, 204, 0.4);
+  }
+}
+
+.open_modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.close_modal {
+  display: none;
+}

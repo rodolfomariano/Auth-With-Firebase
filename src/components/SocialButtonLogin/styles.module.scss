@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+  border: none;
+  font-size: 1rem;
+  height: 2rem;
+  box-shadow: 0 0 4px #b8b8b8;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  padding-left: 1rem;
+  padding-right: .5rem;
+  transition: box-shadow 300ms;
+
+  display: flex;
+  align-items: center;
+
+  .icon {
+    color: #2A2A2A;
+    margin-right: 1rem;
+  }
+
+  .title {
+    font-weight: 300;
+    color: #2A2A2A;
+  }
+
+  &:hover {
+    box-shadow: 0 0 8px #b8b8b8;
+  }
+
+}
