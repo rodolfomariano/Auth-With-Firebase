@@ -5,11 +5,17 @@ import { useState } from 'react'
 import { InputLogin } from '../components/InputLogin'
 import { SimpleButton } from '../components/SimpleButton'
 import { SocialButtonLogin } from '../components/SocialButtonLogin'
+import { useFirebaseAuth } from '../hooks/auth'
 
 import styles from '../styles/Home.module.scss'
 
 const Home: NextPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
+
+  // @ts-ignore
+  const { user, loading, signInWithGitHub } = useFirebaseAuth()
+
+  console.log(user)
 
   return (
     <>
@@ -19,7 +25,11 @@ const Home: NextPage = () => {
 
           <div className={styles.social_button_container}>
             <SocialButtonLogin type='google' title='Entrar com Google' />
-            <SocialButtonLogin type='github' title='Entrar com GitHub' />
+            <SocialButtonLogin
+              type='github'
+              title='Entrar com GitHub'
+              onClick={() => signInWithGitHub()}
+            />
           </div>
 
           <div className={styles.separator}>
