@@ -1,15 +1,38 @@
+import Router from "next/router"
+import { useEffect, useState } from "react"
 import { useFirebaseAuth } from "../../../hooks/auth"
 
 interface UserData {
-  name: string
+  displayName: string
   email: string
   photoURL: string
 }
 
-export default function dashboard() {
-  const { user } = useFirebaseAuth()
+export default function Dashboard() {
+  const { user, provider, signOut } = useFirebaseAuth()
+  const [userLogged, setUserLogged] = useState<UserData>(user)
+
+
+  useEffect(() => {
+    let getUser = localStorage.getItem('user_auth')
+
+    if (getUser) {
+      let getUserObject = JSON.parse(getUser)
+      setUserLogged(getUserObject)
+
+    } else {
+      Router.push('/')
+    }
+
+  }, [])
+
 
   return (
-    <h1>Dashboard: {user.displayName}</h1>
+    <h1>Dashboard: {userLogged.displayName}
+      <button onClick={signOut}>Sair</button>
+      <h2>
+        Logado com: {provider}
+      </h2>
+    </h1>
   )
 }

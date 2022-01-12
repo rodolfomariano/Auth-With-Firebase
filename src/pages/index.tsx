@@ -13,7 +13,7 @@ const Home: NextPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
 
   // @ts-ignore
-  const { user, loading, signInWithGitHub } = useFirebaseAuth()
+  const { user, loading, signInWithGitHub, signInWithGoogle } = useFirebaseAuth()
 
   console.log(user)
 
@@ -24,7 +24,12 @@ const Home: NextPage = () => {
           <h1 className={styles.title}>Login</h1>
 
           <div className={styles.social_button_container}>
-            <SocialButtonLogin type='google' title='Entrar com Google' />
+            <SocialButtonLogin
+              type='google'
+              title='Entrar com Google'
+              onClick={() => signInWithGoogle()}
+            />
+
             <SocialButtonLogin
               type='github'
               title='Entrar com GitHub'
