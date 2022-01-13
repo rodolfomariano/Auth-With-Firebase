@@ -17,6 +17,8 @@ interface AuthContextData {
   loading: boolean
   signInWithGitHub: () => void
   signInWithGoogle: () => void
+  createUserWithEmailAndPassword: (name: string, email: string, password: string) => void
+  signInWithEmail: (email: string, password: string) => void
   signOut: () => void
   provider: string
 }
@@ -94,6 +96,66 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  function createUserWithEmailAndPassword(name: string, email: string, password: string) {
+    Firebase.auth().createUserWithEmailAndPassword(email, password).then((response) => {
+      console.log(response.user)
+
+      setUser({
+        displayName: name,
+        email: email,
+        photoURL: ''
+      })
+
+    }).catch((error) => {
+      console.log(error)
+    }).finally(() => {
+
+      const editUser = Firebase.auth().currentUser
+
+      editUser?.updateProfile({
+        displayName: name,
+        photoURL: 'https://firebasestorage.googleapis.com/v0/b/auth-text-rms.appspot.com/o/user.png?alt=media&token=996ca0f8-519c-486c-853e-1bf7147305ad'
+      }).then(() => {
+        localStorage.setItem('user_auth', JSON.stringify(user))
+        Router.push('/')
+
+      }).catch(error => {
+        console.log(error)
+      })
+
+    })
+  }
+
+  function signInWithEmail(email: string, password: string) {
+    try {
+      const signIn = Firebase.auth().signInWithEmailAndPassword(email, password).then(response => {
+
+        if (response.user) {
+          setProvider(response.user!.providerData[0]!.providerId)
+
+          const { displayName, email, photoURL } = response.user as User
+
+          setUser({
+            displayName,
+            email,
+            photoURL
+          })
+
+          Router.push('/app/dashboard')
+        }
+
+      })
+
+      return signIn
+
+    } catch (error) {
+      setLoading(false)
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   function signOut() {
     try {
       localStorage.setItem('user_auth', '')
@@ -117,7 +179,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }, [user])
 
   return (
-    <AuthContext.Provider value={{ user, loading, provider, signInWithGitHub, signInWithGoogle, signOut }}>
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      provider,
+      signInWithGitHub,
+      signInWithGoogle,
+      createUserWithEmailAndPassword,
+      signInWithEmail,
+      signOut
+    }}>
       {children}
     </AuthContext.Provider>
   )

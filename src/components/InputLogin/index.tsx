@@ -1,14 +1,14 @@
+import { useState, InputHTMLAttributes } from 'react'
 import styles from './styles.module.scss'
 
 import { AiOutlineMail, AiOutlineLock, AiOutlineEyeInvisible, AiOutlineEye, AiOutlineUser } from 'react-icons/ai'
-import { useState } from 'react'
 
-interface InputLoginProps {
+interface InputLoginProps extends InputHTMLAttributes<HTMLInputElement> {
   type: 'email' | 'password' | 'user'
   placeholder?: string
 }
 
-export function InputLogin({ type, placeholder }: InputLoginProps) {
+export function InputLogin({ type, placeholder, ...rest }: InputLoginProps) {
   const [isHidden, setIsHidden] = useState(true)
 
   return (
@@ -21,6 +21,7 @@ export function InputLogin({ type, placeholder }: InputLoginProps) {
             type="email"
             placeholder={placeholder}
             required
+            {...rest}
           />
         </div>
       )
@@ -33,6 +34,7 @@ export function InputLogin({ type, placeholder }: InputLoginProps) {
               type="text"
               placeholder={placeholder}
               required
+              {...rest}
             />
           </div>
         )
@@ -44,6 +46,7 @@ export function InputLogin({ type, placeholder }: InputLoginProps) {
               type={isHidden ? 'password' : 'text'}
               placeholder={placeholder}
               required
+              {...rest}
             />
             {isHidden
               ? <AiOutlineEyeInvisible className={styles.icon_right} onClick={() => setIsHidden(false)} />

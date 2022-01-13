@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
 
 import { InputLogin } from '../components/InputLogin'
 import { SimpleButton } from '../components/SimpleButton'
@@ -11,11 +11,17 @@ import styles from '../styles/Home.module.scss'
 
 const Home: NextPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  // @ts-ignore
-  const { user, loading, signInWithGitHub, signInWithGoogle } = useFirebaseAuth()
+  const { user, loading, signInWithGitHub, signInWithGoogle, signInWithEmail } = useFirebaseAuth()
 
   console.log(user)
+
+  function signInWithEmailAndPassword(event: FormEvent) {
+    event.preventDefault()
+    signInWithEmail(email, password)
+  }
 
   return (
     <>
@@ -43,10 +49,20 @@ const Home: NextPage = () => {
           </div>
 
           <form action="">
-            <InputLogin type='email' placeholder='Digite seu email' />
-            <InputLogin type='password' placeholder='Digite sua senha' />
+            <InputLogin
+              type='email'
+              placeholder='Digite seu email'
+              onChange={(event) => setEmail(event.target.value)}
+              value={email}
+            />
+            <InputLogin
+              type='password'
+              placeholder='Digite sua senha'
+              onChange={(event) => setPassword(event.target.value)}
+              value={password}
+            />
 
-            <SimpleButton title='Entrar' />
+            <SimpleButton title='Entrar' onClick={(event) => signInWithEmailAndPassword(event)} />
           </form>
 
           <span
