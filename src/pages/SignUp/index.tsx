@@ -52,7 +52,7 @@ export default function SignUp() {
 
     if (password.length === 0) {
       console.log('Digite uma senha')
-    } else if (name.length < 3) {
+    } else if (name.length < 6) {
       console.log('Digite uma senha valida')
     } else if (password !== passwordConfirm) {
       console.log('As senhas não batem!')

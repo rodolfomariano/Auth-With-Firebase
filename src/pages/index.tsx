@@ -1,6 +1,6 @@
+import { FormEvent, useState } from 'react'
 import type { NextPage } from 'next'
 import Link from 'next/link'
-import { FormEvent, useState } from 'react'
 
 import { InputLogin } from '../components/InputLogin'
 import { SimpleButton } from '../components/SimpleButton'
@@ -13,15 +13,30 @@ const Home: NextPage = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [modalLoading, setModalLoading] = useState(false)
 
-  const { user, loading, signInWithGitHub, signInWithGoogle, signInWithEmail } = useFirebaseAuth()
+  const [emailToRecoverPassword, setEmailToRecoverPassword] = useState('')
 
-  console.log(user)
+  const { user, loading, setLoading, signInWithGitHub, signInWithGoogle, signInWithEmail, recoverPassword } = useFirebaseAuth()
 
   function signInWithEmailAndPassword(event: FormEvent) {
     event.preventDefault()
+
+    setModalLoading(true)
     signInWithEmail(email, password)
   }
+
+  function handleCloseModal() {
+    setModalIsOpen(false)
+    setEmailToRecoverPassword('')
+  }
+
+  function handleRecoverPassword() {
+    recoverPassword(emailToRecoverPassword)
+    setModalIsOpen(false)
+    setEmailToRecoverPassword('')
+  }
+
 
   return (
     <>
@@ -62,7 +77,10 @@ const Home: NextPage = () => {
               value={password}
             />
 
-            <SimpleButton title='Entrar' onClick={(event) => signInWithEmailAndPassword(event)} />
+            <SimpleButton
+              title={'Entrar'}
+              onClick={(event) => signInWithEmailAndPassword(event)}
+            />
           </form>
 
           <span
@@ -88,7 +106,7 @@ const Home: NextPage = () => {
           <header className={styles.modal_header}>
             <button
               className={styles.close_modal_btn}
-              onClick={() => setModalIsOpen(false)}
+              onClick={handleCloseModal}
             >
               X
             </button>
@@ -97,21 +115,43 @@ const Home: NextPage = () => {
             </h3>
           </header>
 
-          <InputLogin type='email' placeholder='Digite seu email' />
+          <InputLogin
+            type='email'
+            placeholder='Digite seu email'
+            onChange={(event) => setEmailToRecoverPassword(event.target.value)}
+            value={emailToRecoverPassword}
+          />
 
           <footer className={styles.modal_footer}>
             <button
               className={styles.cancel}
-              onClick={() => setModalIsOpen(false)}
+              onClick={handleCloseModal}
             >
               Cancelar
             </button>
-            <button className={styles.send}>Enviar</button>
+            <button
+              className={styles.send}
+              onClick={handleRecoverPassword}
+            >
+              Enviar
+            </button>
           </footer>
         </div>
         <div
           className={styles.modal_bg}
           onClick={() => setModalIsOpen(false)}
+        />
+      </div>
+
+      {/* Modal Loading */}
+      <div className={!modalLoading ? `${styles.modal_container} ${styles.close_modal}` : `${styles.modal_container} ${styles.open_modal}`}>
+        <div className={styles.content}>
+          <h1>Carregando...</h1>
+
+        </div>
+        <div
+          className={styles.modal_bg}
+          onClick={() => setModalLoading(false)}
         />
       </div>
     </>

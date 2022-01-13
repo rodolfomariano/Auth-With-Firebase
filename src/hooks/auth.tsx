@@ -15,10 +15,12 @@ interface AuthProviderProps {
 interface AuthContextData {
   user: User
   loading: boolean
+  setLoading: (value: boolean) => void
   signInWithGitHub: () => void
   signInWithGoogle: () => void
   createUserWithEmailAndPassword: (name: string, email: string, password: string) => void
   signInWithEmail: (email: string, password: string) => void
+  recoverPassword: (email: string) => void
   signOut: () => void
   provider: string
 }
@@ -27,7 +29,7 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [provider, setProvider] = useState('')
 
   function signInWithGoogle() {
@@ -35,7 +37,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(true)
 
       const signIn = Firebase.auth().signInWithPopup(new Firebase.auth.GoogleAuthProvider).then((response) => {
-        console.log(response.user)
 
         if (response.user) {
           setProvider(response.user!.providerData[0]!.providerId)
@@ -68,7 +69,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(true)
 
       const signIn = Firebase.auth().signInWithPopup(new Firebase.auth.GithubAuthProvider()).then((response) => {
-        console.log(response.user)
 
         if (response.user) {
           setProvider(response.user!.providerData[0]!.providerId)
@@ -97,8 +97,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   function createUserWithEmailAndPassword(name: string, email: string, password: string) {
+    setLoading(true)
     Firebase.auth().createUserWithEmailAndPassword(email, password).then((response) => {
-      console.log(response.user)
 
       setUser({
         displayName: name,
@@ -107,6 +107,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       })
 
     }).catch((error) => {
+      setLoading(false)
       console.log(error)
     }).finally(() => {
 
@@ -117,9 +118,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
         photoURL: 'https://firebasestorage.googleapis.com/v0/b/auth-text-rms.appspot.com/o/user.png?alt=media&token=996ca0f8-519c-486c-853e-1bf7147305ad'
       }).then(() => {
         localStorage.setItem('user_auth', JSON.stringify(user))
+        setLoading(false)
         Router.push('/')
 
       }).catch(error => {
+        setLoading(false)
         console.log(error)
       })
 
@@ -128,6 +131,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function signInWithEmail(email: string, password: string) {
     try {
+      setLoading(true)
+
       const signIn = Firebase.auth().signInWithEmailAndPassword(email, password).then(response => {
 
         if (response.user) {
@@ -141,7 +146,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
             photoURL
           })
 
-          Router.push('/app/dashboard')
+          setTimeout(() => {
+            Router.push('/app/dashboard')
+
+          }, 3000)
+
         }
 
       })
@@ -154,6 +163,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       setLoading(false)
     }
+  }
+
+  function recoverPassword(email: string) {
+
+    Firebase.auth().sendPasswordResetEmail(email).then(() => {
+
+    }).catch(error => {
+      console.log(error)
+    })
   }
 
   function signOut() {
@@ -183,10 +201,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       user,
       loading,
       provider,
+      setLoading,
       signInWithGitHub,
       signInWithGoogle,
       createUserWithEmailAndPassword,
       signInWithEmail,
+      recoverPassword,
       signOut
     }}>
       {children}
