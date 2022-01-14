@@ -6,6 +6,7 @@ interface User {
   displayName: string
   email: string
   photoURL: string
+  provider?: string
 }
 
 interface AuthProviderProps {
@@ -22,7 +23,6 @@ interface AuthContextData {
   signInWithEmail: (email: string, password: string) => void
   recoverPassword: (email: string) => void
   signOut: () => void
-  provider: string
 }
 
 const AuthContext = createContext<AuthContextData>({} as AuthContextData)
@@ -30,7 +30,6 @@ const AuthContext = createContext<AuthContextData>({} as AuthContextData)
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>({} as User)
   const [loading, setLoading] = useState(false)
-  const [provider, setProvider] = useState('')
 
   function signInWithGoogle() {
     try {
@@ -39,14 +38,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const signIn = Firebase.auth().signInWithPopup(new Firebase.auth.GoogleAuthProvider).then((response) => {
 
         if (response.user) {
-          setProvider(response.user!.providerData[0]!.providerId)
+          // setProvider(response.user!.providerData[0]!.providerId)
 
           const { displayName, email, photoURL } = response.user as User
 
           setUser({
             displayName,
             email,
-            photoURL
+            photoURL,
+            provider: response.user!.providerData[0]!.providerId
           })
 
           Router.push('/app/dashboard')
@@ -71,14 +71,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const signIn = Firebase.auth().signInWithPopup(new Firebase.auth.GithubAuthProvider()).then((response) => {
 
         if (response.user) {
-          setProvider(response.user!.providerData[0]!.providerId)
+          // setProvider(response.user!.providerData[0]!.providerId)
 
           const { displayName, email, photoURL } = response.user as User
 
           setUser({
             displayName,
             email,
-            photoURL
+            photoURL,
+            provider: response.user!.providerData[0]!.providerId
           })
 
           Router.push('/app/dashboard')
@@ -136,14 +137,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const signIn = Firebase.auth().signInWithEmailAndPassword(email, password).then(response => {
 
         if (response.user) {
-          setProvider(response.user!.providerData[0]!.providerId)
+          // setProvider(response.user!.providerData[0]!.providerId)
 
           const { displayName, email, photoURL } = response.user as User
 
           setUser({
             displayName,
             email,
-            photoURL
+            photoURL,
+            provider: response.user!.providerData[0]!.providerId
           })
 
           setTimeout(() => {
@@ -200,7 +202,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider value={{
       user,
       loading,
-      provider,
       setLoading,
       signInWithGitHub,
       signInWithGoogle,

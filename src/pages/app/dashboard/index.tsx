@@ -6,10 +6,11 @@ interface UserData {
   displayName: string
   email: string
   photoURL: string
+  provider?: string
 }
 
 export default function Dashboard() {
-  const { user, provider, signOut } = useFirebaseAuth()
+  const { user, signOut } = useFirebaseAuth()
   const [userLogged, setUserLogged] = useState<UserData>(user)
 
 
@@ -31,7 +32,7 @@ export default function Dashboard() {
     <h1>Dashboard: {userLogged.displayName}
       <button onClick={signOut}>Sair</button>
       <h2>
-        Logado com: {provider}
+        Logado com: {userLogged.provider}
       </h2>
     </h1>
   )
